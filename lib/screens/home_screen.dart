@@ -157,25 +157,22 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
-          final itemnit = items[index];
-          Map<String, dynamic> item = itemnit is Map<String, dynamic>
-              ? itemnit
-              : {
-                  'name': itemnit['name'],
-                  'price': itemnit['price'],
-                  'image': itemnit['image'],
-                  'availability': itemnit['availability'],
-                  'condition': itemnit['condition'],
-                  'description': "This is description"
-                };
-          print(item);
+          final item = items[index];
+
           return GestureDetector(
               onTap: () {
                 // Navigate to the item information screen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ItemInfoScreen(item: item),
+                    builder: (context) => ItemInfoScreen(item: {
+                      'name': item['name'],
+                      'price': item['price'],
+                      'image': item['image'],
+                      'availability': item['availability'],
+                      'condition': item['condition'],
+                      'description': "This is description"
+                    }),
                   ),
                 );
               },
