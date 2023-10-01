@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'add_item_screen.dart';
 import 'profile_screen.dart';
 import 'cart_screen.dart';
 import 'item_info_screen.dart';
 
 class HomeScreen extends StatefulWidget {
+  final String username; // Received from login
+  // final Map<String, dynamic> userData; // Received from login
+
+  HomeScreen({required this.username});
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -236,14 +241,26 @@ class _HomeScreenState extends State<HomeScreen> {
               context,
               MaterialPageRoute(
                 builder: (context) => ProfileScreen(
-                  username: 'John Doe', // Replace with the actual username
+                  username: widget.username, // Replace with the actual username
                   profileImage:
-                      'https://example.com/profile.jpg', // Replace with the actual profile image URL
+                      'https://th.bing.com/th/id/OIG.9UruK5kMssCBj9z.Fumk?pid=ImgGn', // Replace with the actual profile image URL
                 ),
               ),
             );
           }
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          // Navigate to the Add Item screen when the FAB is pressed
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => AddItemScreen(),
+            ),
+          );
+        },
+        child: Icon(Icons.add),
       ),
     );
   }

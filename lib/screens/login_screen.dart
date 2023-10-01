@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:tryfirst/widgets/custom_button.dart';
 import 'package:tryfirst/widgets/custom_textfield.dart';
+import 'home_screen.dart';
 import 'signup_screen.dart'; // Import the signup screen.
 
 class LoginScreen extends StatefulWidget {
@@ -15,24 +16,41 @@ class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _passwordController = TextEditingController();
 
   Future<void> _login() async {
-    final String apiUrl =
-        'https://your-backend-api.com/login'; // Replace with your API endpoint.
+    try {
+      final String apiUrl =
+          'http://192.168.1.65:8000/api/login/'; // Replace with your API endpoint.
 
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      body: {
-        'email': _emailController.text.trim(),
-        'password': _passwordController.text,
-      },
-    );
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        body: {
+          'email': _emailController.text.trim(),
+          'password': _passwordController.text,
+        },
+      );
+      print(response);
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        // Handle the response, e.g., navigate to another screen.
+        // final userData = responseData['user'];
+        final username = responseData['user_name'];
 
-    if (response.statusCode == 200) {
-      final responseData = json.decode(response.body);
-      // Handle the response, e.g., navigate to another screen.
-      print('User logged in: $responseData');
-    } else {
-      // Handle errors, e.g., show an error message.
-      print('Error during login: ${response.body}');
+        // Navigate to the home screen and pass user data
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomeScreen(
+              username: username,
+              // userData: userData,
+            ),
+          ),
+        );
+        print('User logged in: $responseData');
+      } else {
+        // Handle errors, e.g., show an error message.
+        print('Error during login: ${response.body}');
+      }
+    } catch (e) {
+      print('Error : $e');
     }
   }
 
